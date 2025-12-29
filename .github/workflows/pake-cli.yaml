@@ -176,7 +176,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.name }}-Linux-deb
-          path: ${{ inputs.name }}.deb
+          path: |
+            *.deb
+            *-binary
           retention-days: 3
           if-no-files-found: ignore
 
