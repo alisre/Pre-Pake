@@ -19,6 +19,7 @@ on:
       url:
         description: "Website URL"
         required: true
+        default: "https://127.0.0.1/#/login"
       name:
         description: "App name (lowercase for Linux)"
         required: true
@@ -98,7 +99,7 @@ jobs:
         timeout-minutes: 25
         shell: bash
         run: |
-          ARGS="${{ inputs.url }} --name ${{ inputs.name }} --fullscreen --incognito  --ignore-certificate-errors --keep-binary --debug"
+          ARGS="${{ inputs.url }} --name ${{ inputs.name }} --fullscreen --incognito  --ignore-certificate-errors --keep-binary"
 
           if [ -n "${{ inputs.icon }}" ]; then
             ARGS="$ARGS --icon ${{ inputs.icon }}"
