@@ -23,6 +23,12 @@ use util::get_pake_config;
 
 pub fn run_app() {
     let (pake_config, tauri_config) = get_pake_config();
+    
+    // Enable certificate error ignoring for Linux/WebKitGTK when configured
+    #[cfg(target_os = "linux")]
+    if pake_config.windows[0].ignore_certificate_errors {
+        std::env::set_var("WEBKIT_DISABLE_TLS_VERIFICATION", "1");
+    }
     let tauri_app = tauri::Builder::default();
 
     let show_system_tray = pake_config.show_system_tray();

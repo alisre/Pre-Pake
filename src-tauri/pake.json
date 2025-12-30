@@ -18,7 +18,8 @@
       "enable_drag_drop": false,
       "maximize": false,
       "start_to_tray": false,
-      "force_internal_navigation": false
+      "force_internal_navigation": false,
+      "ignore_certificate_errors": true
     }
   ],
   "user_agent": {
