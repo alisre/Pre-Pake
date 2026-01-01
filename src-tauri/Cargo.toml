@@ -52,3 +52,6 @@ codegen-units = 16
 lto = "thin"
 opt-level = "z"
 strip = true
+
+[patch.crates-io]
+wry = { git = "https://github.com/alisre/wry" }
