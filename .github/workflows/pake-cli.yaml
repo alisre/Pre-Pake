@@ -111,7 +111,7 @@ jobs:
         timeout-minutes: 25
         shell: bash
         run: |
-          ARGS="${{ inputs.url }} --name ${{ inputs.name }} --fullscreen --incognito  --ignore-certificate-errors --keep-binary"
+          ARGS="${{ inputs.url }} --name ${{ inputs.name }} --fullscreen --incognito  --ignore-certificate-errors --keep-binary --enable-drag-drop"
 
           if [ -n "${{ inputs.icon }}" ]; then
             ARGS="$ARGS --icon ${{ inputs.icon }}"
