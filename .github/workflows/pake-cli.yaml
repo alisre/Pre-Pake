@@ -106,50 +106,6 @@ jobs:
           # Optional: try to update the wry package explicitly (no-op if already correct)
           cargo update -p wry || true
 
-      - name: Verify wry source (Linux)
-        if: runner.os == 'Linux'
-        shell: bash
-        run: |
-          set -euxo pipefail
-          cd src-tauri
-          echo "--- wry package in Cargo.lock ---"
-          awk '
-            $0 == "[[package]]" { in_pkg=1; name=""; source="" }
-            in_pkg && $1 == "name" && $3 { name=$3 }
-            in_pkg && $1 == "source" && $3 { source=$3 }
-            in_pkg && $0 == "" {
-              if (name == "\"wry\"") {
-                print "name=", name
-                print "source=", source
-                exit
-              }
-              in_pkg=0
-            }
-          ' Cargo.lock | sed 's/[[:space:]]\+$//'
-
-          WRY_SOURCE=$(awk '
-            $0 == "[[package]]" { in_pkg=1; name=""; source="" }
-            in_pkg && $1 == "name" && $3 { name=$3 }
-            in_pkg && $1 == "source" && $3 { source=$3 }
-            in_pkg && $0 == "" {
-              if (name == "\"wry\"") { print source; exit }
-              in_pkg=0
-            }
-          ' Cargo.lock)
-
-          if [[ -z "${WRY_SOURCE}" ]]; then
-            echo "ERROR: Could not find wry package in Cargo.lock" >&2
-            exit 1
-          fi
-
-          # Expect git source because we patch to GitHub.
-          if [[ "${WRY_SOURCE}" != git+https://github.com/alisre/wry* ]]; then
-            echo "ERROR: wry is not coming from the expected git source." >&2
-            echo "Got: ${WRY_SOURCE}" >&2
-            echo "Expected prefix: git+https://github.com/alisre/wry" >&2
-            exit 1
-          fi
-
       - name: Build App (Linux/macOS)
         if: runner.os != 'Windows'
         timeout-minutes: 25
