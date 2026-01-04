@@ -460,9 +460,23 @@ export async function downloadIcon(
   }, customTimeout || 10000);
 
   try {
+    // For HTTPS URLs with self-signed certificates, we need to disable certificate validation
+    // This is done via NODE_TLS_REJECT_UNAUTHORIZED environment variable
+    const originalRejectUnauthorized = process.env.NODE_TLS_REJECT_UNAUTHORIZED;
+    if (iconUrl.startsWith('https://127.0.0.1') || iconUrl.startsWith('https://localhost')) {
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+    }
+
     const response = await fetch(iconUrl, {
       signal: controller.signal,
     });
+
+    // Restore original setting
+    if (originalRejectUnauthorized !== undefined) {
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = originalRejectUnauthorized;
+    } else {
+      delete process.env.NODE_TLS_REJECT_UNAUTHORIZED;
+    }
 
     clearTimeout(timeoutId);
 
